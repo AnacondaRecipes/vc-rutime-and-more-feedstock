@@ -193,8 +193,8 @@
 	  - name: ucrt
 	    version: {{ ucrt_version }}
 	    script: ucrt_bld.bat
-            build:
-              skip: True
+	    build:
+	      skip: True  # [runtime_version != "14.29.30139"]
 
 	    requirements:
 	      build:
