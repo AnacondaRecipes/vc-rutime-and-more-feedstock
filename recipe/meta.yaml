@@ -35,7 +35,8 @@ build:
 outputs:
   - name: vs{{ runtime_year }}_runtime
     version: {{ runtime_version }}
-    script: python -m vc_repack --extract --version {{ runtime_version }} -a {{ target_platform }} vc_repack.py
+    script: bld_vc_runtime.bat
+    # script: python -m vc_repack --extract --version {{ runtime_version }} -a {{ target_platform }} vc_repack.py
     build:
       binary_relocation: false
       detect_binary_files_with_prefix: false
