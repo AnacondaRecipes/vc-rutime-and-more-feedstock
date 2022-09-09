@@ -27,8 +27,6 @@ source:
   # Latest version redirect: https://aka.ms/vs/16/release/vc_redist.x86.exe
   - url: https://download.visualstudio.microsoft.com/download/pr/{{ uuid }}/{{ sha256 }}/vc_redist.x86.exe  # [win32]
     sha256: {{ sha256 | lower }}  # [win32]
-  - url: https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_WindowsSDK.iso
-    sha256: a0cdc3fc9db69084c8dd8c09ee153c1a168366ac4dfc3d890abbf0bf17e635dc
 
 build:
   number: 7
@@ -37,9 +35,7 @@ build:
 outputs:
   - name: vs{{ runtime_year }}_runtime
     version: {{ runtime_version }}
-    script: vc_repack.py
-    script_interpreter: >-
-      python -m vc_repack --extract --version {{ runtime_version }} -a {{ target_platform }}
+    script: python -m vc_repack --extract --version {{ runtime_version }} -a {{ target_platform }} vc_repack.py
     build:
       binary_relocation: false
       detect_binary_files_with_prefix: false
@@ -153,10 +149,7 @@ outputs:
           
   - name: vs{{ vsyear }}_{{ target_platform }}
     version: {{ cl_version }}
-    script: vc_repack.py
-    script_interpreter: >-
-      python -m vc_repack --activate --arch {{ target_platform }} --version {{ runtime_version }}
-      --activate-year {{ vsyear }} --activate-major {{ vsver }} --activate-vcver {{ vcver }}
+    script: python -m vc_repack --activate --arch {{ target_platform }} --version {{ runtime_version }} --activate-year {{ vsyear }} --activate-major {{ vsver }} --activate-vcver {{ vcver }} vc_repack.py
     build:
       track_features:
         - vc{{ vcver.split(".")[0] }}
@@ -186,31 +179,6 @@ outputs:
         (VS {{ vsyear }} compiler, update {{ update_version }})
       license: BSD-3-Clause
       license_family: BSD
-
-  - name: ucrt
-    version: {{ ucrt_version }}
-    script: ucrt_bld.bat
-    build:
-      skip: True  # [runtime_version != "14.29.30139"]
-
-    requirements:
-      build:
-        - 7zip
-      host:
-      run:
-        run_constrained:
-          - vs2015_runtime >=14.29.30037
-
-    test:
-      commands:
-        - if not exist %PREFIX%\\ucrtbase.dll exit 1
-        - if not exist %LIBRARY_PREFIX%\\bin\\ucrtbase.dll exit 1
-
-    about:
-      home: https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/
-      license: LicenseRef-Proprietary
-      license_file: ucrt-LICENSE.txt
-      summary: 'Redistributable files for Windows SDK. This is only needed Windows <10'
 
 about:
   home: https://docs.microsoft.com/en-us/visualstudio/windows/?view=vs-2017
