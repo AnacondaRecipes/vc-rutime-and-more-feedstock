@@ -207,11 +207,11 @@ outputs:
         - if not exist %PREFIX%\\ucrtbase.dll exit 1
         - if not exist %LIBRARY_PREFIX%\\bin\\ucrtbase.dll exit 1
 
-     about:
-       home: https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/
-       license: LicenseRef-Proprietary
-       license_file: ucrt-LICENSE.txt
-       summary: 'Redistributable files for Windows SDK. This is only needed Windows <10'
+    about:
+      home: https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/
+      license: LicenseRef-Proprietary
+      license_file: ucrt-LICENSE.txt
+      summary: 'Redistributable files for Windows SDK. This is only needed Windows <10'
 
 about:
   home: https://docs.microsoft.com/en-us/visualstudio/windows/?view=vs-2017
