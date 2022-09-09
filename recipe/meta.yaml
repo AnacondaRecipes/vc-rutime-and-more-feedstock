@@ -190,10 +190,12 @@
 	      license: BSD-3-Clause
 	      license_family: BSD
 
-{% if runtime_version == "14.29.30139" %}
 	  - name: ucrt
 	    version: {{ ucrt_version }}
 	    script: ucrt_bld.bat
+            build:
+              skip: True
+
 	    requirements:
 	      build:
 		- 7zip
@@ -212,7 +214,6 @@
 	      license: LicenseRef-Proprietary
 	      license_file: ucrt-LICENSE.txt
 	      summary: 'Redistributable files for Windows SDK. This is only needed Windows <10'
-{% endif %}
 
 	about:
 	  home: https://docs.microsoft.com/en-us/visualstudio/windows/?view=vs-2017
