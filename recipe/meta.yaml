@@ -14,6 +14,8 @@
 {% set vcver = "" %}
 {% endif %}
 
+{% set ucrt_version = "10.0.20348.0" %}
+
 package:
   name: vs{{ vsyear }}
   version: {{ runtime_version }}
@@ -25,6 +27,10 @@ source:
   # Latest version redirect: https://aka.ms/vs/16/release/vc_redist.x86.exe
   - url: https://download.visualstudio.microsoft.com/download/pr/{{ uuid }}/{{ sha256 }}/vc_redist.x86.exe  # [win32]
     sha256: {{ sha256 | lower }}  # [win32]
+
+source:
+  url: https://software-download.microsoft.com/download/sg/20348.1.210507-1500.fe_release_WindowsSDK.iso
+  sha256: a0cdc3fc9db69084c8dd8c09ee153c1a168366ac4dfc3d890abbf0bf17e635dc
 
 build:
   number: 7
@@ -183,6 +189,29 @@ outputs:
         (VS {{ vsyear }} compiler, update {{ update_version }})
       license: BSD-3-Clause
       license_family: BSD
+
+  - name: ucrt
+    version: {{ ucrt_version }}
+    script: ucrt_bld.bat
+
+    requirements:
+      build:
+        - 7zip
+      host:
+      run:
+      run_constrained:
+        - vs2015_runtime >=14.29.30037
+
+    test:
+      commands:
+        - if not exist %PREFIX%\\ucrtbase.dll exit 1
+        - if not exist %LIBRARY_PREFIX%\\bin\\ucrtbase.dll exit 1
+
+     about:
+       home: https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/
+       license: LicenseRef-Proprietary
+       license_file: ucrt-LICENSE.txt
+       summary: 'Redistributable files for Windows SDK. This is only needed Windows <10'
 
 about:
   home: https://docs.microsoft.com/en-us/visualstudio/windows/?view=vs-2017
