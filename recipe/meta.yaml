@@ -14,6 +14,7 @@
 {% set vcver = "" %}
 {% endif %}
 
+{% set build_number = 20 %}
 {% set ucrt_version = "10.0.20348.0" %}
 
 package:
@@ -29,7 +30,7 @@ source:
     sha256: {{ sha256 | lower }}  # [win32]
 
 build:
-  number: 7
+  number: {{ build_number }}
   skip: True  # [not win]
 
 outputs:
@@ -40,6 +41,8 @@ outputs:
       binary_relocation: false
       detect_binary_files_with_prefix: false
       no_link:
+        - |
+          *.dll
         - Library/bin/*.dll
       missing_dso_whitelist:
         - "*.dll"
@@ -77,42 +80,42 @@ outputs:
       'api-ms-win-core-libraryloader-l1-1-0.dll',
       'api-ms-win-core-localization-l1-2-0.dll',
       'api-ms-win-core-memory-l1-1-0.dll',
-                    'api-ms-win-core-namedpipe-l1-1-0.dll',
-                    'api-ms-win-core-processenvironment-l1-1-0.dll',
-                    'api-ms-win-core-processthreads-l1-1-0.dll',
-                    'api-ms-win-core-processthreads-l1-1-1.dll',
-                    'api-ms-win-core-profile-l1-1-0.dll',
-                    'api-ms-win-core-rtlsupport-l1-1-0.dll',
-                    'api-ms-win-core-string-l1-1-0.dll',
-                    'api-ms-win-core-synch-l1-1-0.dll',
-                    'api-ms-win-core-synch-l1-2-0.dll',
-                    'api-ms-win-core-sysinfo-l1-1-0.dll',
-                    'api-ms-win-core-timezone-l1-1-0.dll',
-                    'api-ms-win-core-util-l1-1-0.dll',
-                    'api-ms-win-crt-conio-l1-1-0.dll',
-                    'api-ms-win-crt-convert-l1-1-0.dll',
-                    'api-ms-win-crt-environment-l1-1-0.dll',
-                    'api-ms-win-crt-filesystem-l1-1-0.dll',
-                    'api-ms-win-crt-heap-l1-1-0.dll',
-                    'api-ms-win-crt-locale-l1-1-0.dll',
-                    'api-ms-win-crt-math-l1-1-0.dll',
-                    'api-ms-win-crt-multibyte-l1-1-0.dll',
-                    'api-ms-win-crt-private-l1-1-0.dll',
-                    'api-ms-win-crt-process-l1-1-0.dll',
-                    'api-ms-win-crt-runtime-l1-1-0.dll',
-                    'api-ms-win-crt-stdio-l1-1-0.dll',
-                    'api-ms-win-crt-string-l1-1-0.dll',
-                    'api-ms-win-crt-time-l1-1-0.dll',
-                    'api-ms-win-crt-utility-l1-1-0.dll',
-                    'concrt140.dll',
-                    'msvcp140_1.dll',
-                    'msvcp140_2.dll',
-                    'msvcp140.dll',
-                    'ucrtbase.dll',
-                    'vcamp140.dll',
-                    'vccorlib140.dll',
-                    'vcomp140.dll',
-                    'vcruntime140.dll'] %}
+      'api-ms-win-core-namedpipe-l1-1-0.dll',
+      'api-ms-win-core-processenvironment-l1-1-0.dll',
+      'api-ms-win-core-processthreads-l1-1-0.dll',
+      'api-ms-win-core-processthreads-l1-1-1.dll',
+      'api-ms-win-core-profile-l1-1-0.dll',
+      'api-ms-win-core-rtlsupport-l1-1-0.dll',
+      'api-ms-win-core-string-l1-1-0.dll',
+      'api-ms-win-core-synch-l1-1-0.dll',
+      'api-ms-win-core-synch-l1-2-0.dll',
+      'api-ms-win-core-sysinfo-l1-1-0.dll',
+      'api-ms-win-core-timezone-l1-1-0.dll',
+      'api-ms-win-core-util-l1-1-0.dll',
+      'api-ms-win-crt-conio-l1-1-0.dll',
+      'api-ms-win-crt-convert-l1-1-0.dll',
+      'api-ms-win-crt-environment-l1-1-0.dll',
+      'api-ms-win-crt-filesystem-l1-1-0.dll',
+      'api-ms-win-crt-heap-l1-1-0.dll',
+      'api-ms-win-crt-locale-l1-1-0.dll',
+      'api-ms-win-crt-math-l1-1-0.dll',
+      'api-ms-win-crt-multibyte-l1-1-0.dll',
+      'api-ms-win-crt-private-l1-1-0.dll',
+      'api-ms-win-crt-process-l1-1-0.dll',
+      'api-ms-win-crt-runtime-l1-1-0.dll',
+      'api-ms-win-crt-stdio-l1-1-0.dll',
+      'api-ms-win-crt-string-l1-1-0.dll',
+      'api-ms-win-crt-time-l1-1-0.dll',
+      'api-ms-win-crt-utility-l1-1-0.dll',
+      'concrt140.dll',
+      'msvcp140_1.dll',
+      'msvcp140_2.dll',
+      'msvcp140.dll',
+      'ucrtbase.dll',
+      'vcamp140.dll',
+      'vccorlib140.dll',
+      'vcomp140.dll',
+      'vcruntime140.dll'] %}
           - if not exist %LIBRARY_BIN%\{{ dllname }} exit 1
           - if not exist %PREFIX%\{{ dllname }} exit 1
 {% endfor %}
@@ -150,7 +153,6 @@ outputs:
   - name: vs{{ vsyear }}_{{ target_platform }}
     version: {{ cl_version }}
     script: bld_vs.bat
-    # script: python -m vc_repack --activate --arch {{ target_platform }} --version {{ runtime_version }} --activate-year {{ vsyear }} --activate-major {{ vsver }} --activate-vcver {{ vcver }} vc_repack.py
     build:
       track_features:
         - vc{{ vcver.split(".")[0] }}
