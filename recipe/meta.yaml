@@ -155,8 +155,8 @@ outputs:
     version: {{ cl_version }}
     script: bld_vs.bat
     build:
-      track_features:
-        - vc{{ vcver.split(".")[0] }}
+      track_features:                  # [vsyear != 2015]
+        - vc{{ vcver.split(".")[0] }}  # [vsyear != 2015]
       run_exports:
         strong:
           # compatible within major version.  This is MSFT's
